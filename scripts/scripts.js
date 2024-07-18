@@ -92,6 +92,18 @@ async function loadFonts() {
   }
 }
 
+function autolinkModals(element) {
+  element.addEventListener('click', async (e) => {
+    const origin = e.target.closest('a');
+
+    if (origin && origin.href && origin.href.includes('/modals/')) {
+      e.preventDefault();
+      const { openModal } = await import(`${window.hlx.codeBasePath}/blocks/modal/modal.js`);
+      openModal(origin.href);
+    }
+  });
+}
+
 /**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
@@ -157,11 +169,8 @@ async function loadEager(doc) {
     preloadFile('/scripts/__dropins__/storefront-pdp/containers/ProductDetails.js', 'script');
     preloadFile('/scripts/__dropins__/storefront-pdp/api.js', 'script');
     preloadFile('/scripts/__dropins__/storefront-pdp/render.js', 'script');
-    preloadFile('/scripts/__dropins__/storefront-pdp/runtime.js', 'script');
-    preloadFile('/scripts/__dropins__/storefront-pdp/713.js', 'script');
-    preloadFile('/scripts/__dropins__/storefront-pdp/275.js', 'script');
-    preloadFile('/scripts/__dropins__/storefront-pdp/918.js', 'script');
-    preloadFile('/scripts/__dropins__/storefront-pdp/148.js', 'script');
+    preloadFile('/scripts/__dropins__/storefront-pdp/chunks/initialize.js', 'script');
+    preloadFile('/scripts/__dropins__/storefront-pdp/chunks/getRefinedProduct.js', 'script');
   } else if (document.body.querySelector('main .product-details-custom')) {
     pageType = 'Product';
     preloadFile('/scripts/preact.js', 'script');
@@ -235,6 +244,8 @@ async function loadEager(doc) {
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
+  autolinkModals(doc);
+
   const main = doc.querySelector('main');
   await loadBlocks(main);
 
@@ -247,9 +258,9 @@ async function loadLazy(doc) {
     loadFooter(doc.querySelector('footer')),
     loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`),
     loadFonts(),
+    import('./acdl/adobe-client-data-layer.min.js'),
   ]);
 
-  await import('./acdl/adobe-client-data-layer.min.js');
   if (sessionStorage.getItem('acdl:debug')) {
     import('./acdl/validate.js');
   }

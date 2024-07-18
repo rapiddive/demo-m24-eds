@@ -12,6 +12,10 @@ import { events } from '@dropins/tools/event-bus.js';
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
+// TODO: Following two imports added for demo purpose (Auth Drop-In)
+import renderAuthCombine from './renderAuthCombine.js';
+import { renderAuthDropdown } from './renderAuthDropdown.js';
+
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
@@ -19,9 +23,7 @@ function closeOnEscape(e) {
   if (e.code === 'Escape') {
     const nav = document.getElementById('nav');
     const navSections = nav.querySelector('.nav-sections');
-    const navSectionExpanded = navSections.querySelector(
-      '[aria-expanded="true"]',
-    );
+    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
     if (navSectionExpanded && isDesktop.matches) {
       // eslint-disable-next-line no-use-before-define
       toggleAllNavSections(navSections);
@@ -69,20 +71,12 @@ function toggleAllNavSections(sections, expanded = false) {
  * @param {*} forceExpanded Optional param to force nav expand behavior when not null
  */
 function toggleMenu(nav, navSections, forceExpanded = null) {
-  const expanded = forceExpanded !== null
-    ? !forceExpanded
-    : nav.getAttribute('aria-expanded') === 'true';
+  const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
   const button = nav.querySelector('.nav-hamburger button');
   document.body.style.overflowY = expanded || isDesktop.matches ? '' : 'hidden';
   nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-  toggleAllNavSections(
-    navSections,
-    expanded || isDesktop.matches ? 'false' : 'true',
-  );
-  button.setAttribute(
-    'aria-label',
-    expanded ? 'Open navigation' : 'Close navigation',
-  );
+  toggleAllNavSections(navSections, expanded || isDesktop.matches ? 'false' : 'true');
+  button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
   // enable nav dropdown keyboard accessibility
   const navDrops = navSections.querySelectorAll('.nav-drop');
   if (isDesktop.matches) {
@@ -148,10 +142,7 @@ export default async function decorate(block) {
           if (isDesktop.matches) {
             const expanded = navSection.getAttribute('aria-expanded') === 'true';
             toggleAllNavSections(navSections);
-            navSection.setAttribute(
-              'aria-expanded',
-              expanded ? 'false' : 'true',
-            );
+            navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
           }
         });
       });
@@ -245,9 +236,7 @@ export default async function decorate(block) {
     }
   }
 
-  navTools
-    .querySelector('.nav-search-button')
-    .addEventListener('click', () => toggleSearch());
+  navTools.querySelector('.nav-search-button').addEventListener('click', () => toggleSearch());
 
   // Close panels when clicking outside
   document.addEventListener('click', (e) => {
@@ -277,4 +266,8 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+
+  // TODO: Following statements added for demo purpose (Auth Drop-In)
+  renderAuthCombine(navSections);
+  renderAuthDropdown(navTools);
 }
