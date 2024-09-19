@@ -11,26 +11,11 @@ export declare const definition: {
                 decreaseLabel: string;
                 increaseLabel: string;
                 label: string;
-                errorMessage: string;
-                minQuantityMessage: string;
-                maxQuantityMessage: string;
             };
             Modal: {
                 Close: {
                     label: string;
                 };
-            };
-            InputPassword: {
-                requiredFieldError: string;
-                placeholder: string;
-                floatingLabel: string;
-                buttonTitle: string;
-            };
-            PasswordStatusIndicator: {
-                chartTwoSymbols: string;
-                chartThreeSymbols: string;
-                chartFourSymbols: string;
-                messageLengthPassword: string;
             };
             InlineAlert: {
                 dismissLabel: string;
@@ -146,26 +131,11 @@ export declare const definition: {
                 decreaseLabel: string;
                 increaseLabel: string;
                 label: string;
-                errorMessage: string;
-                minQuantityMessage: string;
-                maxQuantityMessage: string;
             };
             Modal: {
                 Close: {
                     label: string;
                 };
-            };
-            InputPassword: {
-                requiredFieldError: string;
-                placeholder: string;
-                floatingLabel: string;
-                buttonTitle: string;
-            };
-            PasswordStatusIndicator: {
-                chartTwoSymbols: string;
-                chartThreeSymbols: string;
-                chartFourSymbols: string;
-                messageLengthPassword: string;
             };
             InlineAlert: {
                 dismissLabel: string;
@@ -283,26 +253,11 @@ export declare const getDefinitionByLanguage: (lang: Lang) => {
             decreaseLabel: string;
             increaseLabel: string;
             label: string;
-            errorMessage: string;
-            minQuantityMessage: string;
-            maxQuantityMessage: string;
         };
         Modal: {
             Close: {
                 label: string;
             };
-        };
-        InputPassword: {
-            requiredFieldError: string;
-            placeholder: string;
-            floatingLabel: string;
-            buttonTitle: string;
-        };
-        PasswordStatusIndicator: {
-            chartTwoSymbols: string;
-            chartThreeSymbols: string;
-            chartFourSymbols: string;
-            messageLengthPassword: string;
         };
         InlineAlert: {
             dismissLabel: string;

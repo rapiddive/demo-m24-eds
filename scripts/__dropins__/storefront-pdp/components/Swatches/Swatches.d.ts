@@ -24,7 +24,14 @@ type Selection = {
     };
 };
 export interface SwatchesProps extends HTMLAttributes<HTMLDivElement> {
-    options: Array<Option>;
+    options: Array<{
+        id: string;
+        type: (typeof supportedTypes)[number];
+        label: string;
+        required?: boolean;
+        multiple?: boolean;
+        items: OptionValue[];
+    }>;
     hideSelectedValue?: boolean;
     defaultOptions?: string[];
     selectionsToUpdate?: Option[];
@@ -32,7 +39,6 @@ export interface SwatchesProps extends HTMLAttributes<HTMLDivElement> {
     onErrors?: (errors: {
         [id: string]: string;
     }) => void;
-    selectedUIDs?: string[];
 }
 export declare const Swatches: FunctionComponent<SwatchesProps>;
 export {};

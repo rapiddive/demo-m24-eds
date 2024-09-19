@@ -13,31 +13,17 @@ import {
   performCatalogServiceQuery,
   refineProductQuery,
   setJsonLd,
+  loadErrorPage,
 } from '../../scripts/commerce.js';
 import { readBlockConfig } from '../../scripts/aem.js';
 
 const html = htm.bind(h);
 
-export function errorGettingProduct(code = 404) {
-  fetch(`/${code}.html`).then((response) => {
-    if (response.ok) {
-      return response.text();
-    }
-    throw new Error(`Error getting ${code} page`);
-  }).then((htmlText) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlText, 'text/html');
-    document.body.innerHTML = doc.body.innerHTML;
-    document.head.innerHTML = doc.head.innerHTML;
-  });
-  document.body.innerHTML = '';
-}
-
 async function getVariantDetails(variantIds, sku) {
   const result = await performCatalogServiceQuery(
     refineProductQuery,
     {
-      sku: sku.toUpperCase(),
+      sku,
       variantIds,
     },
   );
@@ -71,9 +57,9 @@ async function setJsonLdProduct(product) {
       '@type': 'Brand',
       name: brand?.value,
     },
-    url: new URL(`/products/${urlKey}/${sku.toLowerCase()}`, window.location),
+    url: new URL(`/products/${urlKey}/${sku}`, window.location),
     sku,
-    '@id': new URL(`/products/${urlKey}/${sku.toLowerCase()}`, window.location),
+    '@id': new URL(`/products/${urlKey}/${sku}`, window.location),
   }, 'product');
 }
 
@@ -101,28 +87,24 @@ class ProductDetailPage extends Component {
       if (!product) {
         throw new Error("Couldn't get product");
       }
-    } catch (e) {
-      errorGettingProduct();
-    }
 
-    this.setState({
-      product,
-      loading: false,
-      selection: {},
-    });
+      this.setState({
+        product,
+        loading: false,
+        selection: {},
+      });
+    } catch (e) {
+      await loadErrorPage();
+    } finally {
+      this.props.resolve();
+    }
   }
 
   onAddToCart = async () => {
     if (Object.keys(this.state.selection).length === (this.state.product.options?.length || 0)) {
       const optionsUIDs = Object.values(this.state.selection).map((option) => option.id);
-      const values = [{
-        optionsUIDs,
-        quantity: this.state.selectedQuantity ?? 1,
-        sku: this.state.product.sku,
-      }];
-      const { addProductsToCart } = await import('@dropins/storefront-cart/api.js');
-      console.debug('onAddToCart', values, addProductsToCart);
-      addProductsToCart(values);
+      const { cartApi } = await import('../../scripts/minicart/api.js');
+      cartApi.addToCart(this.state.product.sku, optionsUIDs, this.state.selectedQuantity ?? 1, 'product-detail');
     }
   };
 
@@ -206,10 +188,12 @@ export default async function decorate($block) {
 
   const skuFromUrl = getSkuFromUrl() || blockConfig.sku;
   if (!skuFromUrl) {
-    errorGettingProduct();
+    await loadErrorPage();
+    return Promise.reject();
   }
 
-  const app = html`<${ProductDetailPage} sku=${skuFromUrl} />`;
-
-  render(app, $block);
+  return new Promise((resolve) => {
+    const app = html`<${ProductDetailPage} sku=${skuFromUrl} resolve=${resolve} />`;
+    render(app, $block);
+  });
 }
