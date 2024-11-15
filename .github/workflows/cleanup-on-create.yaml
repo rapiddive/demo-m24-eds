@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 20
       - name: Remove Helper Files
-        run: | 
+        run: |
           rm -rf \
             .github/workflows/cleanup-on-create.yaml \
             CHANGELOG.md
