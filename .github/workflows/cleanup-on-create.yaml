@@ -2,6 +2,7 @@
 # all files that are not strictly required to build an AEM Live project
 # but that we use to develop the project template. This includes this
 # particular workflow file.
+name: Cleanup on Create
 on:
   create:
     branches:
@@ -23,7 +24,7 @@ jobs:
         with:
           node-version: 20
       - name: Remove Helper Files
-        run: | 
+        run: |
           rm -rf \
             .github/workflows/cleanup-on-create.yaml \
             CHANGELOG.md
