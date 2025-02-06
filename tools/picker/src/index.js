@@ -7,7 +7,7 @@ import getProductsInCategory from './queries/products.graphql.js';
 
 import './styles.css';
 
-const baseURL = process.env.EDS_BASE_URL;
+const baseURL = 'https://main--demo-m24-eds--rapiddive.hlx.live';
 
 /**
  * Object containing all configuration files that should be exposed in the picker.
