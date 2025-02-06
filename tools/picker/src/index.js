@@ -7,13 +7,15 @@ import getProductsInCategory from './queries/products.graphql.js';
 
 import './styles.css';
 
+const baseURL = process.env.EDS_BASE_URL;
+
 /**
  * Object containing all configuration files that should be exposed in the picker.
  */
 const configFiles = {
-    'prod': 'https://main--aem-boilerplate-commerce--hlxsites.hlx.live/configs.json?sheet=prod',
-    'stage': 'https://main--aem-boilerplate-commerce--hlxsites.hlx.live/configs-stage.json',
-    'dev': 'https://main--aem-boilerplate-commerce--hlxsites.hlx.live/configs-dev.json',
+    'prod': `${basePath}/configs.json?sheet=prod`,
+    'stage': `${basePath}/configs-stage.json`,
+    'dev': `${basePath}/configs-dev.json`
 }
 /**
  * Default configuration to be loaded.
