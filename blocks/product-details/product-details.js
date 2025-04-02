@@ -119,39 +119,8 @@ export default async function decorate(block) {
       },
     })($gallery),
 
-    // pdpRendered.render(ProductDetails, {
-    //   sku: getSkuFromUrl(),
-    //   slots: {
-    //     Title: (ctx) => {
-    // const brandHTML = document.createElement('div');
-    // const brand = product.attributes?.filter((attr) => attr.id === 'plant_brand')[0]?.value;
-    // console.log('brand', brand);
-    // if (brand && brand !== 'undefined') {
-    //   brandHTML.className = 'product-details__brand';
-    //   brandHTML.innerHTML = `<h4>${brand}</h4>`;
-    //   ctx.prependChild(brandHTML);
-    // }
-    //       return ctx;
-    //     },
-    //   }
-    // })($brand),
-
     // Header
-    pdpRendered.render(ProductHeader, {
-      slots: {
-        Content: (ctx) => {
-          const brandHTML = document.createElement('div');
-          const brand = product.attributes?.filter((attr) => attr.id === 'plant_brand')[0]?.value;
-          console.log('brand', brand);
-          if (brand && brand !== 'undefined') {
-            brandHTML.className = 'product-details__brand';
-            brandHTML.innerHTML = `<h4>${brand}</h4>`;
-            ctx.prependChild(brandHTML);
-          }
-          return ctx;
-        },
-      }
-    })($header),
+    pdpRendered.render(ProductHeader, {})($header),
 
     // Price
     pdpRendered.render(ProductPrice, {})($price),
@@ -269,7 +238,6 @@ export default async function decorate(block) {
       document.title = product.name;
       const brandHTML = document.createElement('div');
       const brand = product.attributes?.filter((attr) => attr.id === 'plant_brand')[0]?.value;
-      console.log('brand', brand);
       if (brand && brand !== 'undefined') {
         brandHTML.className = 'product-details__brand';
         brandHTML.innerHTML = `<h4>${brand}</h4>`;
@@ -295,7 +263,7 @@ async function setJsonLdProduct(product) {
     attributes,
   } = product;
   const amount = priceRange?.minimum?.final?.amount || price?.final?.amount;
-  const brand = attributes.find((attr) => attr.name === 'brand');
+  const brand = attributes.find((attr) => attr.name === 'plant_brand');
 
   // get variants
   const { data } = await pdpApi.fetchGraphQl(`
