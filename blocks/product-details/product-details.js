@@ -123,14 +123,14 @@ export default async function decorate(block) {
     //   sku: getSkuFromUrl(),
     //   slots: {
     //     Title: (ctx) => {
-          // const brandHTML = document.createElement('div');
-          // const brand = product.attributes?.filter((attr) => attr.id === 'plant_brand')[0]?.value;
-          // console.log('brand', brand);
-          // if (brand && brand !== 'undefined') {
-          //   brandHTML.className = 'product-details__brand';
-          //   brandHTML.innerHTML = `<h4>${brand}</h4>`;
-          //   ctx.prependChild(brandHTML);
-          // }
+    // const brandHTML = document.createElement('div');
+    // const brand = product.attributes?.filter((attr) => attr.id === 'plant_brand')[0]?.value;
+    // console.log('brand', brand);
+    // if (brand && brand !== 'undefined') {
+    //   brandHTML.className = 'product-details__brand';
+    //   brandHTML.innerHTML = `<h4>${brand}</h4>`;
+    //   ctx.prependChild(brandHTML);
+    // }
     //       return ctx;
     //     },
     //   }
@@ -268,13 +268,13 @@ export default async function decorate(block) {
       setMetaTags(product);
       document.title = product.name;
       const brandHTML = document.createElement('div');
-          const brand = product.attributes?.filter((attr) => attr.id === 'plant_brand')[0]?.value;
-          console.log('brand', brand);
-          if (brand && brand !== 'undefined') {
-            brandHTML.className = 'product-details__brand';
-            brandHTML.innerHTML = `<h4>${brand}</h4>`;
-            $brand.appendChild(brandHTML);
-          }
+      const brand = product.attributes?.filter((attr) => attr.id === 'plant_brand')[0]?.value;
+      console.log('brand', brand);
+      if (brand && brand !== 'undefined') {
+        brandHTML.className = 'product-details__brand';
+        brandHTML.innerHTML = `<h4>${brand}</h4>`;
+        $brand.appendChild(brandHTML);
+      }
 
     }
   }, { eager: true });
