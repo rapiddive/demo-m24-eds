@@ -11,7 +11,6 @@ import * as pdpApi from '@dropins/storefront-pdp/api.js';
 import { render as pdpRendered } from '@dropins/storefront-pdp/render.js';
 
 // Containers
-import ProductDetails from '@dropins/storefront-pdp/containers/ProductDetails.js';
 import ProductHeader from '@dropins/storefront-pdp/containers/ProductHeader.js';
 import ProductPrice from '@dropins/storefront-pdp/containers/ProductPrice.js';
 import ProductShortDescription from '@dropins/storefront-pdp/containers/ProductShortDescription.js';
@@ -22,8 +21,7 @@ import ProductAttributes from '@dropins/storefront-pdp/containers/ProductAttribu
 import ProductGallery from '@dropins/storefront-pdp/containers/ProductGallery.js';
 
 // Libs
-import { setJsonLd, getSkuFromUrl } from '../../scripts/commerce.js';
-import { fetchPlaceholders } from '../../scripts/aem.js';
+import { fetchPlaceholders, setJsonLd } from '../../scripts/commerce.js';
 
 // Initializers
 import { IMAGES_SIZES } from '../../scripts/initializers/pdp.js';
@@ -43,7 +41,6 @@ export default async function decorate(block) {
         <div class="product-details__gallery"></div>
       </div>
       <div class="product-details__right-column">
-        <div class="product-details__brand"></div>
         <div class="product-details__header"></div>
         <div class="product-details__price"></div>
         <div class="product-details__gallery"></div>
@@ -64,7 +61,6 @@ export default async function decorate(block) {
 
   const $alert = fragment.querySelector('.product-details__alert');
   const $gallery = fragment.querySelector('.product-details__gallery');
-  const $brand = fragment.querySelector('.product-details__brand');
   const $header = fragment.querySelector('.product-details__header');
   const $price = fragment.querySelector('.product-details__price');
   const $galleryMobile = fragment.querySelector('.product-details__right-column .product-details__gallery');
@@ -236,14 +232,6 @@ export default async function decorate(block) {
       setJsonLdProduct(product);
       setMetaTags(product);
       document.title = product.name;
-      const brandHTML = document.createElement('div');
-      const brand = product.attributes?.filter((attr) => attr.id === 'plant_brand')[0]?.value;
-      if (brand && brand !== 'undefined') {
-        brandHTML.className = 'product-details__brand';
-        brandHTML.innerHTML = `<h4>${brand}</h4>`;
-        $brand.appendChild(brandHTML);
-      }
-
     }
   }, { eager: true });
 
@@ -263,7 +251,7 @@ async function setJsonLdProduct(product) {
     attributes,
   } = product;
   const amount = priceRange?.minimum?.final?.amount || price?.final?.amount;
-  const brand = attributes.find((attr) => attr.name === 'plant_brand');
+  const brand = attributes.find((attr) => attr.name === 'brand');
 
   // get variants
   const { data } = await pdpApi.fetchGraphQl(`
